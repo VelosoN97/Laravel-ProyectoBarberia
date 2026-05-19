@@ -29,7 +29,15 @@ class ServicioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|integer|min:0',
+            'duracion' => 'required|integer|min:1',
+            'estado' => 'required|boolean'
+        ]);
+        Servicio::create($request->all());
+        return redirect()->route('servicios.index')->with('success','Servicio creado correctamente.');
     }
 
     /**
