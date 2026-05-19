@@ -53,7 +53,7 @@ class ServicioController extends Controller
      */
     public function edit(Servicio $servicio)
     {
-        //
+        return view('servicios.edit', compact('servicio'));
     }
 
     /**
