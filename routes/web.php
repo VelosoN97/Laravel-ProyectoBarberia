@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('servicios', ServicioController::class);
+Route::resource('horarios', HorarioController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
