@@ -37,7 +37,7 @@ class ServicioController extends Controller
             'estado' => 'required|boolean'
         ]);
         Servicio::create($request->all());
-        return redirect()->route('servicios.index')->with('success','Servicio creado correctamente.');
+        return redirect()->route('servicios.index')->with('success', 'Servicio creado correctamente.');
     }
 
     /**
@@ -61,7 +61,15 @@ class ServicioController extends Controller
      */
     public function update(Request $request, Servicio $servicio)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|integer|min:0',
+            'duracion' => 'required|integer|min:1',
+            'estado' => 'required|boolean',
+        ]);
+        $servicio->update($request->all());
+        return redirect()->route('servicios.index')->with('success', 'Servicio actualizado correctamente.');
     }
 
     /**
