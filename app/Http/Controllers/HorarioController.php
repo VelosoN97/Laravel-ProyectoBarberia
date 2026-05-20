@@ -12,7 +12,10 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        //
+        $horarios = Horario::orderBy('fecha', 'asc')
+            ->orderBy('hora_inicio', 'asc')
+            ->get();
+        return view('horarios.index', compact('horarios'));
     }
 
     /**
@@ -20,7 +23,7 @@ class HorarioController extends Controller
      */
     public function create()
     {
-        //
+        return view('horarios.create');
     }
 
     /**
@@ -28,7 +31,17 @@ class HorarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'fecha' => 'required|date',
+            'hora_inicio' => 'required',
+            'hora_fin' => 'required|after:hora_inicio',
+            'estado' => 'required|boolean',
+        ]);
+
+        Horario::create($request->all());
+
+        return redirect()->route('horarios.index')
+            ->with('success', 'Horario creado correctamente.');
     }
 
     /**
