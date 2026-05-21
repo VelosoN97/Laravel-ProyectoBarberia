@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reserva;
+use App\Models\Servicio;
+use App\Models\Horario;
 use Illuminate\Http\Request;
 
 class ReservaController extends Controller
@@ -12,7 +14,12 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        //
+        $reservas = Reserva::with([
+            'user',
+            'servicio',
+            'horario'
+        ])->get();
+        return view('reservas.index', compact('reservas'));
     }
 
     /**
@@ -20,7 +27,12 @@ class ReservaController extends Controller
      */
     public function create()
     {
-        //
+        $servicios = Servicio::where('estado', true)->get();
+        $horarios = Horario::where('estado', true)->get();
+        return view('reservas.create', compact(
+            'servicios',
+            'horarios'
+        ));
     }
 
     /**
