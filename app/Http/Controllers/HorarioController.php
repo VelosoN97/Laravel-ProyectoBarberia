@@ -57,7 +57,7 @@ class HorarioController extends Controller
      */
     public function edit(Horario $horario)
     {
-        //
+        return view('horarios.edit', compact('horario'));
     }
 
     /**
