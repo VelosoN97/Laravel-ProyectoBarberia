@@ -13,4 +13,8 @@ class Servicio extends Model
         'duracion',
         'estado'
     ];
+
+    public function reservas(){
+        return $this->hasMany(Reserva::class);
+    }
 }

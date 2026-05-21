@@ -12,4 +12,9 @@ class Horario extends Model
         'hora_fin',
         'estado',
     ];
+
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class);
+    }
 }
