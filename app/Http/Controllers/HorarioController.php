@@ -65,7 +65,15 @@ class HorarioController extends Controller
      */
     public function update(Request $request, Horario $horario)
     {
-        //
+        $request->validate([
+            'fecha' => 'required|date',
+            'hora_inicio' => 'required',
+            'hora_fin' => 'required|after:hora_inicio',
+            'estado' => 'required|boolean',
+        ]);
+        $horario->update($request->all());
+        return redirect()->route('horarios.index')
+        ->with('success', 'Horario actualizado correctamente');
     }
 
     /**
@@ -73,6 +81,8 @@ class HorarioController extends Controller
      */
     public function destroy(Horario $horario)
     {
-        //
+        $horario->delete();
+        return redirect()->route('horarios.index')
+        ->with('success', 'Horario eliminado correctamente.');
     }
 }
