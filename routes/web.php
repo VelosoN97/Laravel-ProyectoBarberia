@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ServicioController;
@@ -15,6 +16,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/dashboard-admin', [
+        DashboardController::class,
+        'index'
+    ])->name('dashboard.admin');
+
     Route::resource('servicios', ServicioController::class);
     Route::resource('horarios', HorarioController::class);
 });
