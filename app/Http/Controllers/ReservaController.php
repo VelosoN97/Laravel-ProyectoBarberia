@@ -6,6 +6,7 @@ use App\Models\Reserva;
 use App\Models\Servicio;
 use App\Models\Horario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservaController extends Controller
 {
@@ -40,7 +41,29 @@ class ReservaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'servicio_id' => 'required|exists:servicios,id',
+            'horario_id' => 'required|exists:horarios,id',
+        ]);
+
+        Reserva::create([
+            'user_id' => Auth::id(),
+            'servicio_id' => $request->servicio_id,
+            'horario_id' => $request->horario_id,
+            'estado' => 'Pendiente',
+        ]);
+
+        Horario::where('id', $request->horario_id)
+            ->update([
+                'estado' => false
+            ]);
+
+        return redirect()
+            ->route('reservas.index')
+            ->with(
+                'success',
+                'Reserva creada correctamente.'
+            );
     }
 
     /**
