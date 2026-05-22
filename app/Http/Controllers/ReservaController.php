@@ -79,7 +79,11 @@ class ReservaController extends Controller
      */
     public function edit(Reserva $reserva)
     {
-        //
+        $servicios = Servicio::where('estado', true)->get();
+        $horarios = Horario::where('estado', true)
+        ->orWhere('id', $reserva->horario_id)
+        ->get();
+        return view('reservas.edit', compact('reserva', 'servicios', 'horarios'));
     }
 
     /**
