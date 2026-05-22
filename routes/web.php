@@ -14,9 +14,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('servicios', ServicioController::class);
-Route::resource('horarios', HorarioController::class);
-Route::middleware('auth')->group(function(){
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('servicios', ServicioController::class);
+    Route::resource('horarios', HorarioController::class);
+});
+
+Route::middleware('auth')->group(function () {
     Route::resource('reservas', ReservaController::class);
 });
 
@@ -26,4 +29,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

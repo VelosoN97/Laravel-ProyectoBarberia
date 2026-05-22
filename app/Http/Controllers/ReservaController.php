@@ -15,11 +15,23 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        $reservas = Reserva::with([
-            'user',
-            'servicio',
-            'horario'
-        ])->get();
+        if (Auth::user()->role == 'admin') {
+
+            $reservas = Reserva::with([
+                'user',
+                'servicio',
+                'horario'
+            ])->get();
+        } else {
+
+            $reservas = Reserva::with([
+                'user',
+                'servicio',
+                'horario'
+            ])
+                ->where('user_id', Auth::id())
+                ->get();
+        }
         return view('reservas.index', compact('reservas'));
     }
 
