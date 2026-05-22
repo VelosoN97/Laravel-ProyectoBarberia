@@ -13,7 +13,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <h1 class="h3 mb-4">Editar reserva</h1>
-                <form action="{{ route('reservas.update', $reserva->id)" method="POST">
+                <form action="{{ route('reservas.update', $reserva->id)}}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
