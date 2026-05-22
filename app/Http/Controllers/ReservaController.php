@@ -81,8 +81,8 @@ class ReservaController extends Controller
     {
         $servicios = Servicio::where('estado', true)->get();
         $horarios = Horario::where('estado', true)
-        ->orWhere('id', $reserva->horario_id)
-        ->get();
+            ->orWhere('id', $reserva->horario_id)
+            ->get();
         return view('reservas.edit', compact('reserva', 'servicios', 'horarios'));
     }
 
@@ -91,7 +91,21 @@ class ReservaController extends Controller
      */
     public function update(Request $request, Reserva $reserva)
     {
-        //
+        $request->validate([
+            'servicio_id' => 'required|exists:servicios,id',
+            'horario_id' => 'required|exists:horarios,id',
+            'estado' => 'required'
+        ]);
+        if ($reserva->horario_id != $request->horario_id) {
+            Horario::where('id', $reserva->horario_id)->update(['estado' => true]);
+            Horario::where('id', $request->horario_id)->update(['estado' => false]);
+        }
+        $reserva->update([
+            'servicio_id' => $request->servicio_id,
+            'horario_id' => $request->horario_id,
+            'estado' => $request->estado
+        ]);
+        return redirect()->route('reservas.index')->with('success', 'Reserva actualizada correctamente.');
     }
 
     /**
@@ -99,6 +113,18 @@ class ReservaController extends Controller
      */
     public function destroy(Reserva $reserva)
     {
-        //
+        Horario::where('id', $reserva->horario_id)
+            ->update([
+                'estado' => true
+            ]);
+
+        $reserva->delete();
+
+        return redirect()
+            ->route('reservas.index')
+            ->with(
+                'success',
+                'Reserva eliminada correctamente.'
+            );
     }
 }
