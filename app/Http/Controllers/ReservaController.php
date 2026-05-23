@@ -139,4 +139,19 @@ class ReservaController extends Controller
                 'Reserva eliminada correctamente.'
             );
     }
+
+    public function cambiarEstado(Request $request, Reserva $reserva){
+        $request->validate([
+            'estado' => 'required'
+        ]);
+
+        $reserva->update([
+            'estado' => $request->estado
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Estado actualizado correctamente'
+        ]);
+    }
 }
