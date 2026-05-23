@@ -52,23 +52,31 @@
                                 {{ $reserva->horario->hora_inicio }}
                             </td>
                             <td>
-                                @if($reserva->estado == 'Pendiente')
-                                <span class="badge bg-warning text-dark">
-                                    Pendiente
-                                </span>
-                                @elseif($reserva->estado == 'Confirmada')
-                                <span class="badge bg-primary">
-                                    Confirmada
-                                </span>
-                                @elseif($reserva->estado == 'Completada')
-                                <span class="badge bg-success">
-                                    Completada
-                                </span>
-                                @else
-                                <span class="badge bg-danger">
-                                    Cancelada
-                                </span>
-                                @endif
+                                <select
+                                    class="form-select estado-select"
+                                    data-id="{{ $reserva->id }}">
+
+                                    <option value="Pendiente"
+                                        {{ $reserva->estado == 'Pendiente' ? 'selected' : '' }}>
+                                        Pendiente
+                                    </option>
+
+                                    <option value="Confirmada"
+                                        {{ $reserva->estado == 'Confirmada' ? 'selected' : '' }}>
+                                        Confirmada
+                                    </option>
+
+                                    <option value="Completada"
+                                        {{ $reserva->estado == 'Completada' ? 'selected' : '' }}>
+                                        Completada
+                                    </option>
+
+                                    <option value="Cancelada"
+                                        {{ $reserva->estado == 'Cancelada' ? 'selected' : '' }}>
+                                        Cancelada
+                                    </option>
+
+                                </select>
                             </td>
                             <td>
 
@@ -111,6 +119,52 @@
             </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.estado-select')
+            .forEach(select => {
+
+                select.addEventListener('change', function() {
+
+                    let reservaId = this.dataset.id;
+
+                    let estado = this.value;
+
+                    fetch(`/reservas/${reservaId}/estado`, {
+
+                            method: 'PATCH',
+
+                            headers: {
+                                'Content-Type': 'application/json',
+
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+
+                            body: JSON.stringify({
+                                estado: estado
+                            })
+
+                        })
+                        .then(response => response.json())
+
+                        .then(data => {
+
+                            console.log(data);
+
+                            alert(data.message);
+
+                        })
+                        .catch(error => {
+
+                            console.error(error);
+
+                            alert('Error al actualizar');
+
+                        });
+
+                });
+
+            });
+    </script>
 </body>
 
 </html>
