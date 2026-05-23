@@ -28,6 +28,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('reservas', ReservaController::class);
+    Route::patch(
+        '/reservas/{reserva}/estado',
+        [ReservaController::class, 'cambiarEstado']
+    )->name('reservas.estado');
 });
 
 Route::middleware('auth')->group(function () {
