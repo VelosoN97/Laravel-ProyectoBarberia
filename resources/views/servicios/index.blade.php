@@ -1,78 +1,190 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('title', 'Servicios')
 
-<body class="bg-light">
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h3 mb-0">Servicios</h1>
-                    <a href="{{route('servicios.create')}}" class="btn btn-primary">
-                        Agregar servicio
-                    </a>
-                </div>
-                @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-                @endif
-                <table class="table table-bordered table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Duración</th>
-                            <th>Estado</th>
-                            <th width="180">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($servicios as $servicio)
-                        <tr>
-                            <td>{{$servicio->id}}</td>
-                            <td>{{$servicio->nombre}}</td>
-                            <td>${{number_format($servicio->precio, 0, ',', '.')}}</td>
-                            <td>{{$servicio->duracion}} min</td>
-                            <td>
-                                @if($servicio->estado)
-                                <span class="badge bg-success">Activo</span>
-                                @else
-                                <span class="badge bg-secondary">Inactivo</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('servicios.edit', $servicio->id) }}" class="btn btn-warning btn-sm">
-                                    Editar
-                                </a>
+@section('content')
 
-                                <form action="{{ route('servicios.destroy', $servicio->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
+<div class="card shadow-sm">
 
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este servicio?')">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No hay servicios registrados.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h1 class="h3 mb-0">
+
+                Servicios
+
+            </h1>
+
+            <a href="{{ route('servicios.create') }}"
+               class="btn btn-primary">
+
+                Crear servicio
+
+            </a>
+
         </div>
-    </div>
-</body>
 
-</html>
+        @if(session('success'))
+
+            <div class="alert alert-success">
+
+                {{ session('success') }}
+
+            </div>
+
+        @endif
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Duración</th>
+                    <th>Estado</th>
+                    <th width="180">Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @forelse($servicios as $servicio)
+
+                    <tr>
+
+                        <td>{{ $servicio->id }}</td>
+
+                        <td>{{ $servicio->nombre }}</td>
+
+                        <td>
+
+                            ${{ number_format($servicio->precio, 0, ',', '.') }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $servicio->duracion }} min
+
+                        </td>
+
+                        <td>
+
+                            @if($servicio->estado)
+
+                                <span class="badge bg-success">
+
+                                    Activo
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-danger">
+
+                                    Inactivo
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+
+                            <a href="{{ route('servicios.edit', $servicio->id) }}"
+                               class="btn btn-warning btn-sm">
+
+                                Editar
+
+                            </a>
+
+                            <form action="{{ route('servicios.destroy', $servicio->id) }}"
+                                  method="POST"
+                                  class="d-inline">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="button"
+                                        class="btn btn-danger btn-sm btn-eliminar">
+
+                                    Eliminar
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="6" class="text-center">
+
+                            No hay servicios registrados.
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+@endsection
+
+@section('scripts')
+
+<script>
+
+document.querySelectorAll('.btn-eliminar')
+.forEach(button => {
+
+    button.addEventListener('click', function() {
+
+        let form = this.closest('form');
+
+        Swal.fire({
+
+            title: '¿Eliminar servicio?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endsection
