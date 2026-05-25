@@ -1,214 +1,268 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Reservas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('title', 'Reservas')
 
-<body class="bg-light">
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h3 mb-0">Reservas</h1>
-                    <a href="{{ route('reservas.create') }}"
-                        class="btn btn-primary">Crear reserva</a>
-                </div>
-                @if(session('success'))
-                <div class="alert alert-success">
+@section('content')
 
-                    {{ session('success') }}
+<div class="card shadow-sm">
 
-                </div>
-                @endif
-                <table class="table table-bordered table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Cliente</th>
-                            <th>Servicio</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Estado</th>
-                            <th width="180">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($reservas as $reserva)
-                        <tr>
-                            <td>{{ $reserva->id }}</td>
-                            <td>
-                                {{ $reserva->user->name }}
-                            </td>
-                            <td>
-                                {{ $reserva->servicio->nombre }}
-                            </td>
-                            <td>
-                                {{ $reserva->horario->fecha }}
-                            </td>
-                            <td>
-                                {{ $reserva->horario->hora_inicio }}
-                            </td>
-                            <td>
-                                <select
-                                    class="form-select estado-select"
-                                    data-id="{{ $reserva->id }}">
+    <div class="card-body">
 
-                                    <option value="Pendiente"
-                                        {{ $reserva->estado == 'Pendiente' ? 'selected' : '' }}>
-                                        Pendiente
-                                    </option>
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-                                    <option value="Confirmada"
-                                        {{ $reserva->estado == 'Confirmada' ? 'selected' : '' }}>
-                                        Confirmada
-                                    </option>
+            <h1 class="h3 mb-0">
+                Reservas
+            </h1>
 
-                                    <option value="Completada"
-                                        {{ $reserva->estado == 'Completada' ? 'selected' : '' }}>
-                                        Completada
-                                    </option>
+            <a href="{{ route('reservas.create') }}"
+               class="btn btn-primary">
 
-                                    <option value="Cancelada"
-                                        {{ $reserva->estado == 'Cancelada' ? 'selected' : '' }}>
-                                        Cancelada
-                                    </option>
+                Crear reserva
 
-                                </select>
-                            </td>
-                            <td>
+            </a>
 
-                                <a href="{{ route('reservas.edit', $reserva->id) }}"
-                                    class="btn btn-warning btn-sm">
+        </div>
 
-                                    Editar
+        @if(session('success'))
 
-                                </a>
+            <div class="alert alert-success">
 
-                                <form action="{{ route('reservas.destroy', $reserva->id) }}"
-                                    method="POST"
-                                    class="d-inline">
+                {{ session('success') }}
 
-                                    @csrf
-                                    @method('DELETE')
+            </div>
 
-                                    <button type="button"
+        @endif
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th width="180">Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @forelse($reservas as $reserva)
+
+                    <tr>
+
+                        <td>{{ $reserva->id }}</td>
+
+                        <td>
+                            {{ $reserva->user->name }}
+                        </td>
+
+                        <td>
+                            {{ $reserva->servicio->nombre }}
+                        </td>
+
+                        <td>
+                            {{ $reserva->horario->fecha }}
+                        </td>
+
+                        <td>
+                            {{ $reserva->horario->hora_inicio }}
+                        </td>
+
+                        <td>
+
+                            <select
+                                class="form-select estado-select"
+                                data-id="{{ $reserva->id }}">
+
+                                <option value="Pendiente"
+                                    {{ $reserva->estado == 'Pendiente' ? 'selected' : '' }}>
+                                    Pendiente
+                                </option>
+
+                                <option value="Confirmada"
+                                    {{ $reserva->estado == 'Confirmada' ? 'selected' : '' }}>
+                                    Confirmada
+                                </option>
+
+                                <option value="Completada"
+                                    {{ $reserva->estado == 'Completada' ? 'selected' : '' }}>
+                                    Completada
+                                </option>
+
+                                <option value="Cancelada"
+                                    {{ $reserva->estado == 'Cancelada' ? 'selected' : '' }}>
+                                    Cancelada
+                                </option>
+
+                            </select>
+
+                        </td>
+
+                        <td>
+
+                            <a href="{{ route('reservas.edit', $reserva->id) }}"
+                               class="btn btn-warning btn-sm">
+
+                                Editar
+
+                            </a>
+
+                            <form action="{{ route('reservas.destroy', $reserva->id) }}"
+                                  method="POST"
+                                  class="d-inline">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="button"
                                         class="btn btn-danger btn-sm btn-eliminar">
 
-                                        Eliminar
+                                    Eliminar
 
-                                    </button>
+                                </button>
 
-                                </form>
+                            </form>
 
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">
+                        </td>
 
-                                No hay reservas registradas.
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="7" class="text-center">
+
+                            No hay reservas registradas.
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.querySelectorAll('.estado-select')
-            .forEach(select => {
 
-                select.addEventListener('change', function() {
+</div>
 
-                    let reservaId = this.dataset.id;
+@endsection
 
-                    let estado = this.value;
+@section('scripts')
 
-                    fetch(`/reservas/${reservaId}/estado`, {
+<script>
 
-                            method: 'PATCH',
+document.querySelectorAll('.estado-select')
+.forEach(select => {
 
-                            headers: {
-                                'Content-Type': 'application/json',
+    select.addEventListener('change', function() {
 
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
+        let reservaId = this.dataset.id;
 
-                            body: JSON.stringify({
-                                estado: estado
-                            })
+        let estado = this.value;
 
-                        })
-                        .then(response => response.json())
+        fetch(`/reservas/${reservaId}/estado`, {
 
-                        .then(data => {
+            method: 'PATCH',
 
-                            console.log(data);
+            headers: {
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Éxito',
-                                text: data.message,
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
+                'Content-Type': 'application/json',
 
-                        })
-                        .catch(error => {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
 
-                            console.error(error);
+            },
 
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'No se pudo actualizar'
-                            });
+            body: JSON.stringify({
 
-                        });
+                estado: estado
 
-                });
+            })
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            console.log(data);
+
+            Swal.fire({
+
+                icon: 'success',
+                title: 'Éxito',
+                text: data.message,
+                timer: 1500,
+                showConfirmButton: false
 
             });
-    </script>
 
-    <script>
-        document.querySelectorAll('.btn-eliminar')
-            .forEach(button => {
+        })
 
-                button.addEventListener('click', function() {
+        .catch(error => {
 
-                    let form = this.closest('form');
+            console.error(error);
 
-                    Swal.fire({
+            Swal.fire({
 
-                        title: '¿Eliminar reserva?',
-                        text: 'Esta acción no se puede deshacer',
-                        icon: 'warning',
-
-                        showCancelButton: true,
-
-                        confirmButtonText: 'Sí, eliminar',
-
-                        cancelButtonText: 'Cancelar'
-
-                    }).then((result) => {
-
-                        if (result.isConfirmed) {
-
-                            form.submit();
-                        }
-
-                    });
-
-                });
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo actualizar'
 
             });
-    </script>
-</body>
 
-</html>
+        });
+
+    });
+
+});
+
+</script>
+
+<script>
+
+document.querySelectorAll('.btn-eliminar')
+.forEach(button => {
+
+    button.addEventListener('click', function() {
+
+        let form = this.closest('form');
+
+        Swal.fire({
+
+            title: '¿Eliminar reserva?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endsection
