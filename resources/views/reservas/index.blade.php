@@ -94,9 +94,8 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Eliminar reserva?')">
+                                    <button type="button"
+                                        class="btn btn-danger btn-sm btn-eliminar">
 
                                         Eliminar
 
@@ -119,6 +118,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.querySelectorAll('.estado-select')
             .forEach(select => {
@@ -150,16 +150,60 @@
 
                             console.log(data);
 
-                            alert(data.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: data.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
 
                         })
                         .catch(error => {
 
                             console.error(error);
 
-                            alert('Error al actualizar');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pudo actualizar'
+                            });
 
                         });
+
+                });
+
+            });
+    </script>
+
+    <script>
+        document.querySelectorAll('.btn-eliminar')
+            .forEach(button => {
+
+                button.addEventListener('click', function() {
+
+                    let form = this.closest('form');
+
+                    Swal.fire({
+
+                        title: '¿Eliminar reserva?',
+                        text: 'Esta acción no se puede deshacer',
+                        icon: 'warning',
+
+                        showCancelButton: true,
+
+                        confirmButtonText: 'Sí, eliminar',
+
+                        cancelButtonText: 'Cancelar'
+
+                    }).then((result) => {
+
+                        if (result.isConfirmed) {
+
+                            form.submit();
+                        }
+
+                    });
 
                 });
 
