@@ -1,70 +1,116 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Horario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@extends('layouts.main')
 
-<body class="bg-light">
+@section('title', 'Editar Horario')
 
-<div class="container py-5">
-    <div class="card shadow-sm">
-        <div class="card-body">
+@section('content')
 
-            <h1 class="h3 mb-4">Editar horario</h1>
+<div class="card shadow-sm">
 
-            <form action="{{ route('horarios.update', $horario->id) }}" method="POST">
-                @csrf
-                @method('PUT')
+    <div class="card-body">
 
-                <div class="mb-3">
-                    <label class="form-label">Fecha</label>
-                    <input type="date" name="fecha" class="form-control" value="{{ old('fecha', $horario->fecha) }}">
-                    @error('fecha')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+        <h1 class="h3 mb-4">
 
-                <div class="mb-3">
-                    <label class="form-label">Hora inicio</label>
-                    <input type="time" name="hora_inicio" class="form-control" value="{{ old('hora_inicio', $horario->hora_inicio) }}">
-                    @error('hora_inicio')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+            Editar horario
 
-                <div class="mb-3">
-                    <label class="form-label">Hora fin</label>
-                    <input type="time" name="hora_fin" class="form-control" value="{{ old('hora_fin', $horario->hora_fin) }}">
-                    @error('hora_fin')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+        </h1>
 
-                <div class="mb-3">
-                    <label class="form-label">Estado</label>
-                    <select name="estado" class="form-select">
-                        <option value="1" {{ old('estado', $horario->estado) == 1 ? 'selected' : '' }}>Disponible</option>
-                        <option value="0" {{ old('estado', $horario->estado) == 0 ? 'selected' : '' }}>No disponible</option>
-                    </select>
-                    @error('estado')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+        <form action="{{ route('horarios.update', $horario->id) }}"
+              method="POST">
 
-                <button type="submit" class="btn btn-primary">
-                    Actualizar
-                </button>
+            @csrf
+            @method('PUT')
 
-                <a href="{{ route('horarios.index') }}" class="btn btn-secondary">
-                    Volver
-                </a>
-            </form>
+            <div class="mb-3">
 
-        </div>
+                <label class="form-label">
+
+                    Fecha
+
+                </label>
+
+                <input type="date"
+                       name="fecha"
+                       class="form-control"
+                       value="{{ $horario->fecha }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Hora inicio
+
+                </label>
+
+                <input type="time"
+                       name="hora_inicio"
+                       class="form-control"
+                       value="{{ $horario->hora_inicio }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Hora fin
+
+                </label>
+
+                <input type="time"
+                       name="hora_fin"
+                       class="form-control"
+                       value="{{ $horario->hora_fin }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Estado
+
+                </label>
+
+                <select name="estado"
+                        class="form-select">
+
+                    <option value="1"
+                        {{ $horario->estado ? 'selected' : '' }}>
+
+                        Disponible
+
+                    </option>
+
+                    <option value="0"
+                        {{ !$horario->estado ? 'selected' : '' }}>
+
+                        Ocupado
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button class="btn btn-primary">
+
+                Actualizar
+
+            </button>
+
+            <a href="{{ route('horarios.index') }}"
+               class="btn btn-secondary">
+
+                Volver
+
+            </a>
+
+        </form>
+
     </div>
+
 </div>
 
-</body>
-</html>
+@endsection
