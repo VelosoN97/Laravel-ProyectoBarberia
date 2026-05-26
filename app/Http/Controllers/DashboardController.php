@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reserva;
 use App\Models\User;
+use App\Models\Servicio;
 
 class DashboardController extends Controller
 {
@@ -38,12 +39,42 @@ class DashboardController extends Controller
                 return $reserva->servicio->precio;
             });
 
+        $pendientes = Reserva::where(
+            'estado',
+            'Pendiente'
+        )->count();
+
+        $confirmadas = Reserva::where(
+            'estado',
+            'Confirmada'
+        )->count();
+
+        $completadas = Reserva::where(
+            'estado',
+            'Completada'
+        )->count();
+
+        $canceladas = Reserva::where(
+            'estado',
+            'Cancelada'
+        )->count();
+
+        $serviciosPopulares = Servicio::withCount('reservas')
+            ->orderBy('reservas_count', 'desc')
+            ->take(5)
+            ->get();
+
         return view('dashboard.index', compact(
             'totalReservas',
             'reservasPendientes',
             'reservasCompletadas',
             'totalClientes',
-            'ingresos'
+            'ingresos',
+            'pendientes',
+            'confirmadas',
+            'completadas',
+            'canceladas',
+            'serviciosPopulares'
         ));
     }
 }
