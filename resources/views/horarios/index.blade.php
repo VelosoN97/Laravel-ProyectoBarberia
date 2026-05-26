@@ -17,7 +17,7 @@
             </h1>
 
             <a href="{{ route('horarios.create') }}"
-               class="btn btn-primary">
+                class="btn btn-primary">
 
                 Crear horario
 
@@ -27,11 +27,11 @@
 
         @if(session('success'))
 
-            <div class="alert alert-success">
+        <div class="alert alert-success">
 
-                {{ session('success') }}
+            {{ session('success') }}
 
-            </div>
+        </div>
 
         @endif
 
@@ -56,84 +56,89 @@
 
                 @forelse($horarios as $horario)
 
-                    <tr>
+                <tr>
 
-                        <td>{{ $horario->id }}</td>
+                    <td>{{ $horario->id }}</td>
 
-                        <td>{{ $horario->fecha }}</td>
+                    <td>{{ $horario->fecha }}</td>
 
-                        <td>{{ $horario->hora_inicio }}</td>
+                    <td>{{ $horario->hora_inicio }}</td>
 
-                        <td>{{ $horario->hora_fin }}</td>
+                    <td>{{ $horario->hora_fin }}</td>
 
-                        <td>
+                    <td>
 
-                            @if($horario->estado)
+                        @if($horario->estado)
 
-                                <span class="badge bg-success">
+                        <span class="badge bg-success">
 
-                                    Disponible
+                            Disponible
 
-                                </span>
+                        </span>
 
-                            @else
+                        @else
 
-                                <span class="badge bg-danger">
+                        <span class="badge bg-danger">
 
-                                    Ocupado
+                            Ocupado
 
-                                </span>
+                        </span>
 
-                            @endif
+                        @endif
 
-                        </td>
+                    </td>
 
-                        <td>
+                    <td>
 
-                            <a href="{{ route('horarios.edit', $horario->id) }}"
-                               class="btn btn-warning btn-sm">
+                        <a href="{{ route('horarios.edit', $horario->id) }}"
+                            class="btn btn-warning btn-sm">
 
-                                Editar
+                            Editar
 
-                            </a>
+                        </a>
 
-                            <form action="{{ route('horarios.destroy', $horario->id) }}"
-                                  method="POST"
-                                  class="d-inline">
+                        <form action="{{ route('horarios.destroy', $horario->id) }}"
+                            method="POST"
+                            class="d-inline">
 
-                                @csrf
-                                @method('DELETE')
+                            @csrf
+                            @method('DELETE')
 
-                                <button type="button"
-                                        class="btn btn-danger btn-sm btn-eliminar">
+                            <button type="button"
+                                class="btn btn-danger btn-sm btn-eliminar">
 
-                                    Eliminar
+                                Eliminar
 
-                                </button>
+                            </button>
 
-                            </form>
+                        </form>
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @empty
 
-                    <tr>
+                <tr>
 
-                        <td colspan="6" class="text-center">
+                    <td colspan="6" class="text-center">
 
-                            No hay horarios registrados.
+                        No hay horarios registrados.
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @endforelse
 
             </tbody>
 
         </table>
+        <div class="mt-4">
+
+            {{ $horarios->links() }}
+
+        </div>
 
     </div>
 
@@ -144,39 +149,37 @@
 @section('scripts')
 
 <script>
+    document.querySelectorAll('.btn-eliminar')
+        .forEach(button => {
 
-document.querySelectorAll('.btn-eliminar')
-.forEach(button => {
+            button.addEventListener('click', function() {
 
-    button.addEventListener('click', function() {
+                let form = this.closest('form');
 
-        let form = this.closest('form');
+                Swal.fire({
 
-        Swal.fire({
+                    title: '¿Eliminar horario?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
 
-            title: '¿Eliminar horario?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'warning',
+                    showCancelButton: true,
 
-            showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
 
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+                }).then((result) => {
 
-        }).then((result) => {
+                    if (result.isConfirmed) {
 
-            if (result.isConfirmed) {
+                        form.submit();
 
-                form.submit();
+                    }
 
-            }
+                });
+
+            });
 
         });
-
-    });
-
-});
-
 </script>
 
 @endsection

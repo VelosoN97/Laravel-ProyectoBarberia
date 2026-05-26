@@ -14,7 +14,7 @@ class HorarioController extends Controller
     {
         $horarios = Horario::orderBy('fecha', 'asc')
             ->orderBy('hora_inicio', 'asc')
-            ->get();
+            ->paginate(10);
         return view('horarios.index', compact('horarios'));
     }
 
