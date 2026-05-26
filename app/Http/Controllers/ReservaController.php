@@ -60,7 +60,9 @@ class ReservaController extends Controller
             });
         }
 
-        $reservas = $query->get();
+        $reservas = $query
+            ->paginate(10)
+            ->withQueryString();
 
         return view(
             'reservas.index',

@@ -226,6 +226,9 @@
             </tbody>
 
         </table>
+        <div class="mt-4">
+            {{ $reservas->links() }}
+        </div>
 
     </div>
 
