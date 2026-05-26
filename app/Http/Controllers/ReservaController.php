@@ -13,26 +13,59 @@ class ReservaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->role == 'admin') {
+        $query = Reserva::with([
+            'user',
+            'servicio',
+            'horario'
+        ]);
 
-            $reservas = Reserva::with([
-                'user',
-                'servicio',
-                'horario'
-            ])->get();
-        } else {
+        if (Auth::user()->role != 'admin') {
 
-            $reservas = Reserva::with([
-                'user',
-                'servicio',
-                'horario'
-            ])
-                ->where('user_id', Auth::id())
-                ->get();
+            $query->where(
+                'user_id',
+                Auth::id()
+            );
         }
-        return view('reservas.index', compact('reservas'));
+
+        if ($request->filled('buscar')) {
+
+            $query->whereHas('user', function ($q) use ($request) {
+
+                $q->where(
+                    'name',
+                    'like',
+                    '%' . $request->buscar . '%'
+                );
+            });
+        }
+
+        if ($request->filled('estado')) {
+
+            $query->where(
+                'estado',
+                $request->estado
+            );
+        }
+
+        if ($request->filled('fecha')) {
+
+            $query->whereHas('horario', function ($q) use ($request) {
+
+                $q->where(
+                    'fecha',
+                    $request->fecha
+                );
+            });
+        }
+
+        $reservas = $query->get();
+
+        return view(
+            'reservas.index',
+            compact('reservas')
+        );
     }
 
     /**
@@ -140,7 +173,8 @@ class ReservaController extends Controller
             );
     }
 
-    public function cambiarEstado(Request $request, Reserva $reserva){
+    public function cambiarEstado(Request $request, Reserva $reserva)
+    {
         $request->validate([
             'estado' => 'required'
         ]);

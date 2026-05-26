@@ -15,21 +15,96 @@
             </h1>
 
             <a href="{{ route('reservas.create') }}"
-               class="btn btn-primary">
+                class="btn btn-primary">
 
                 Crear reserva
 
             </a>
 
         </div>
+        <form method="GET"
+            action="{{ route('reservas.index') }}"
+            class="row g-3 mb-4">
+
+            <div class="col-md-4">
+
+                <input type="text"
+                    name="buscar"
+                    class="form-control"
+                    placeholder="Buscar cliente..."
+                    value="{{ request('buscar') }}">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <select name="estado"
+                    class="form-select">
+
+                    <option value="">
+                        Todos los estados
+                    </option>
+
+                    <option value="Pendiente"
+                        {{ request('estado') == 'Pendiente' ? 'selected' : '' }}>
+
+                        Pendiente
+
+                    </option>
+
+                    <option value="Confirmada"
+                        {{ request('estado') == 'Confirmada' ? 'selected' : '' }}>
+
+                        Confirmada
+
+                    </option>
+
+                    <option value="Completada"
+                        {{ request('estado') == 'Completada' ? 'selected' : '' }}>
+
+                        Completada
+
+                    </option>
+
+                    <option value="Cancelada"
+                        {{ request('estado') == 'Cancelada' ? 'selected' : '' }}>
+
+                        Cancelada
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <input type="date"
+                    name="fecha"
+                    class="form-control"
+                    value="{{ request('fecha') }}">
+
+            </div>
+
+            <div class="col-md-2 d-grid">
+
+                <button class="btn btn-primary">
+
+                    Filtrar
+
+                </button>
+
+            </div>
+
+        </form>
 
         @if(session('success'))
 
-            <div class="alert alert-success">
+        <div class="alert alert-success">
 
-                {{ session('success') }}
+            {{ session('success') }}
 
-            </div>
+        </div>
 
         @endif
 
@@ -55,96 +130,96 @@
 
                 @forelse($reservas as $reserva)
 
-                    <tr>
+                <tr>
 
-                        <td>{{ $reserva->id }}</td>
+                    <td>{{ $reserva->id }}</td>
 
-                        <td>
-                            {{ $reserva->user->name }}
-                        </td>
+                    <td>
+                        {{ $reserva->user->name }}
+                    </td>
 
-                        <td>
-                            {{ $reserva->servicio->nombre }}
-                        </td>
+                    <td>
+                        {{ $reserva->servicio->nombre }}
+                    </td>
 
-                        <td>
-                            {{ $reserva->horario->fecha }}
-                        </td>
+                    <td>
+                        {{ $reserva->horario->fecha }}
+                    </td>
 
-                        <td>
-                            {{ $reserva->horario->hora_inicio }}
-                        </td>
+                    <td>
+                        {{ $reserva->horario->hora_inicio }}
+                    </td>
 
-                        <td>
+                    <td>
 
-                            <select
-                                class="form-select estado-select"
-                                data-id="{{ $reserva->id }}">
+                        <select
+                            class="form-select estado-select"
+                            data-id="{{ $reserva->id }}">
 
-                                <option value="Pendiente"
-                                    {{ $reserva->estado == 'Pendiente' ? 'selected' : '' }}>
-                                    Pendiente
-                                </option>
+                            <option value="Pendiente"
+                                {{ $reserva->estado == 'Pendiente' ? 'selected' : '' }}>
+                                Pendiente
+                            </option>
 
-                                <option value="Confirmada"
-                                    {{ $reserva->estado == 'Confirmada' ? 'selected' : '' }}>
-                                    Confirmada
-                                </option>
+                            <option value="Confirmada"
+                                {{ $reserva->estado == 'Confirmada' ? 'selected' : '' }}>
+                                Confirmada
+                            </option>
 
-                                <option value="Completada"
-                                    {{ $reserva->estado == 'Completada' ? 'selected' : '' }}>
-                                    Completada
-                                </option>
+                            <option value="Completada"
+                                {{ $reserva->estado == 'Completada' ? 'selected' : '' }}>
+                                Completada
+                            </option>
 
-                                <option value="Cancelada"
-                                    {{ $reserva->estado == 'Cancelada' ? 'selected' : '' }}>
-                                    Cancelada
-                                </option>
+                            <option value="Cancelada"
+                                {{ $reserva->estado == 'Cancelada' ? 'selected' : '' }}>
+                                Cancelada
+                            </option>
 
-                            </select>
+                        </select>
 
-                        </td>
+                    </td>
 
-                        <td>
+                    <td>
 
-                            <a href="{{ route('reservas.edit', $reserva->id) }}"
-                               class="btn btn-warning btn-sm">
+                        <a href="{{ route('reservas.edit', $reserva->id) }}"
+                            class="btn btn-warning btn-sm">
 
-                                Editar
+                            Editar
 
-                            </a>
+                        </a>
 
-                            <form action="{{ route('reservas.destroy', $reserva->id) }}"
-                                  method="POST"
-                                  class="d-inline">
+                        <form action="{{ route('reservas.destroy', $reserva->id) }}"
+                            method="POST"
+                            class="d-inline">
 
-                                @csrf
-                                @method('DELETE')
+                            @csrf
+                            @method('DELETE')
 
-                                <button type="button"
-                                        class="btn btn-danger btn-sm btn-eliminar">
+                            <button type="button"
+                                class="btn btn-danger btn-sm btn-eliminar">
 
-                                    Eliminar
+                                Eliminar
 
-                                </button>
+                            </button>
 
-                            </form>
+                        </form>
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @empty
 
-                    <tr>
+                <tr>
 
-                        <td colspan="7" class="text-center">
+                    <td colspan="7" class="text-center">
 
-                            No hay reservas registradas.
+                        No hay reservas registradas.
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @endforelse
 
@@ -161,108 +236,104 @@
 @section('scripts')
 
 <script>
+    document.querySelectorAll('.estado-select')
+        .forEach(select => {
 
-document.querySelectorAll('.estado-select')
-.forEach(select => {
+            select.addEventListener('change', function() {
 
-    select.addEventListener('change', function() {
+                let reservaId = this.dataset.id;
 
-        let reservaId = this.dataset.id;
+                let estado = this.value;
 
-        let estado = this.value;
+                fetch(`/reservas/${reservaId}/estado`, {
 
-        fetch(`/reservas/${reservaId}/estado`, {
+                        method: 'PATCH',
 
-            method: 'PATCH',
+                        headers: {
 
-            headers: {
+                            'Content-Type': 'application/json',
 
-                'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
 
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
 
-            },
+                        body: JSON.stringify({
 
-            body: JSON.stringify({
+                            estado: estado
 
-                estado: estado
+                        })
 
-            })
+                    })
 
-        })
+                    .then(response => response.json())
 
-        .then(response => response.json())
+                    .then(data => {
 
-        .then(data => {
+                        console.log(data);
 
-            console.log(data);
+                        Swal.fire({
 
-            Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: data.message,
+                            timer: 1500,
+                            showConfirmButton: false
 
-                icon: 'success',
-                title: 'Éxito',
-                text: data.message,
-                timer: 1500,
-                showConfirmButton: false
+                        });
 
-            });
+                    })
 
-        })
+                    .catch(error => {
 
-        .catch(error => {
+                        console.error(error);
 
-            console.error(error);
+                        Swal.fire({
 
-            Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo actualizar'
 
-                icon: 'error',
-                title: 'Error',
-                text: 'No se pudo actualizar'
+                        });
+
+                    });
 
             });
 
         });
-
-    });
-
-});
-
 </script>
 
 <script>
+    document.querySelectorAll('.btn-eliminar')
+        .forEach(button => {
 
-document.querySelectorAll('.btn-eliminar')
-.forEach(button => {
+            button.addEventListener('click', function() {
 
-    button.addEventListener('click', function() {
+                let form = this.closest('form');
 
-        let form = this.closest('form');
+                Swal.fire({
 
-        Swal.fire({
+                    title: '¿Eliminar reserva?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
 
-            title: '¿Eliminar reserva?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'warning',
+                    showCancelButton: true,
 
-            showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
 
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+                }).then((result) => {
 
-        }).then((result) => {
+                    if (result.isConfirmed) {
 
-            if (result.isConfirmed) {
+                        form.submit();
 
-                form.submit();
+                    }
 
-            }
+                });
+
+            });
 
         });
-
-    });
-
-});
-
 </script>
 
 @endsection
