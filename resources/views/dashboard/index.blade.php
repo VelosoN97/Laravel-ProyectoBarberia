@@ -107,8 +107,9 @@
             Reservas por estado
 
         </h4>
-
-        <canvas id="graficoEstados"></canvas>
+        <div style="width: 400px; height: 400px; margin: auto;">
+            <canvas id="graficoEstados"></canvas>
+        </div>      
 
     </div>
 
