@@ -200,27 +200,27 @@
             </table>
 
         </div>
-        <div class="card shadow-sm mt-4">
 
-            <div class="card-body">
+    </div>
+    <div class="card shadow-sm mt-4">
 
-                <h4 class="mb-4">
+        <div class="card-body">
 
-                    Servicios más solicitados
+            <h4 class="mb-4">
 
-                </h4>
+                Servicios más solicitados
 
-                <div style="max-width: 700px; margin:auto;">
+            </h4>
 
-                    <canvas id="graficoServicios"></canvas>
+            <div style="max-width: 700px; margin:auto;">
 
-                </div>
+                <canvas id="graficoServicios"></canvas>
 
             </div>
 
         </div>
-    </div>
 
+    </div>
 
 @endsection
 

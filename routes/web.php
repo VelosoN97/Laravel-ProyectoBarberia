@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
         '/reservas/{reserva}/estado',
         [ReservaController::class, 'cambiarEstado']
     )->name('reservas.estado');
+    Route::get('/calendario', [ReservaController::class, 'calendario'])
+    ->name('reservas.calendario');
 });
 
 Route::middleware('auth')->group(function () {
