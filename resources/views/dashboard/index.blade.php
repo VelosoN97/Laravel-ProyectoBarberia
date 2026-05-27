@@ -114,6 +114,104 @@
     </div>
 
 </div>
+<div class="card shadow-sm mt-4">
+
+    <div class="card-body">
+
+        <h4 class="mb-4">
+
+            Últimas reservas
+
+        </h4>
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach($ultimasReservas as $reserva)
+
+                    <tr>
+
+                        <td>
+
+                            {{ $reserva->user->name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $reserva->servicio->nombre }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $reserva->horario->fecha }}
+
+                        </td>
+
+                        <td>
+
+                            @if($reserva->estado == 'Pendiente')
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pendiente
+
+                                </span>
+
+                            @elseif($reserva->estado == 'Confirmada')
+
+                                <span class="badge bg-primary">
+
+                                    Confirmada
+
+                                </span>
+
+                            @elseif($reserva->estado == 'Completada')
+
+                                <span class="badge bg-success">
+
+                                    Completada
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-danger">
+
+                                    Cancelada
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                    </tr>
+
+                @endforeach
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
 @endsection
 

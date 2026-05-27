@@ -64,6 +64,15 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $ultimasReservas = Reserva::with([
+            'user',
+            'servicio',
+            'horario'
+        ])
+        ->latest()
+        ->take(5)
+        ->get();
+
         return view('dashboard.index', compact(
             'totalReservas',
             'reservasPendientes',
@@ -74,7 +83,8 @@ class DashboardController extends Controller
             'confirmadas',
             'completadas',
             'canceladas',
-            'serviciosPopulares'
+            'serviciosPopulares',
+            'ultimasReservas'
         ));
     }
 }
