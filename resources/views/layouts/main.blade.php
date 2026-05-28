@@ -5,13 +5,11 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>@yield('title')</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -23,8 +21,7 @@
 
         <div class="container">
 
-            <a class="navbar-brand"
-               href="#">
+            <a class="navbar-brand" href="#">
 
                 Barbería App
 
@@ -34,40 +31,38 @@
 
                 @auth
 
-                    @if(auth()->user()->role == 'admin')
-
-                        <a href="{{ route('dashboard.admin') }}"
-                           class="btn btn-outline-light btn-sm">
+                    @if (auth()->user()->role == 'admin')
+                        <a href="{{ route('dashboard.admin') }}" class="btn btn-outline-light btn-sm">
 
                             Dashboard
 
                         </a>
 
-                        <a href="{{ route('servicios.index') }}"
-                           class="btn btn-outline-light btn-sm">
+                        <a href="{{ route('servicios.index') }}" class="btn btn-outline-light btn-sm">
 
                             Servicios
 
                         </a>
 
-                        <a href="{{ route('horarios.index') }}"
-                           class="btn btn-outline-light btn-sm">
+                        <a href="{{ route('horarios.index') }}" class="btn btn-outline-light btn-sm">
 
                             Horarios
 
                         </a>
-
                     @endif
 
-                    <a href="{{ route('reservas.index') }}"
-                       class="btn btn-outline-light btn-sm">
+                    <a href="{{ route('reservas.index') }}" class="btn btn-outline-light btn-sm">
 
                         Reservas
 
                     </a>
+                    <a href="{{ route('reservas.calendario') }}" class="btn btn-outline-light btn-sm">
 
-                    <form action="{{ route('logout') }}"
-                          method="POST">
+                        Calendario
+
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST">
 
                         @csrf
 
