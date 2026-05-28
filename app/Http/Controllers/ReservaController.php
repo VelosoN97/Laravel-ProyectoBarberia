@@ -190,4 +190,39 @@ class ReservaController extends Controller
             'message' => 'Estado actualizado correctamente'
         ]);
     }
+
+    public function calendario(){
+
+        $reservas = Reserva::with([
+            'user',
+            'servicio',
+            'horario'
+        ])->get();
+
+        $eventos = [];
+        foreach($reservas as $reserva){
+            $eventos[] = [
+
+                'title' => 
+                $reserva->servicio->nombre .
+                ' - ' .
+                $reserva->user->name,
+
+                'start' =>
+                $reserva->horario->fecha .
+                'T' .
+                $reserva->horario->hora_inicio,
+
+                'color' => match($reserva->estado){
+                    'Pendiente' => '#ffc107',
+                    'Confirmada' => '#0d6efd',
+                    'Completada' => '#198754',
+                    'Cancelada' => '#dc3545',
+
+                    default => '#6c757d'
+                }
+            ];
+        }
+        return view('reservas.calendario', compact('eventos'));
+    }
 }
