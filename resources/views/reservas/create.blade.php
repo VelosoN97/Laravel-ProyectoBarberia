@@ -4,124 +4,153 @@
 
 @section('content')
 
-<div class="card shadow-sm">
+    <div class="card shadow-sm">
 
-    <div class="card-body">
+        <div class="card-body">
 
-        <h1 class="h3 mb-4">
+            <h1 class="h3 mb-4">
 
-            Crear reserva
+                Crear reserva
 
-        </h1>
+            </h1>
 
-        <form action="{{ route('reservas.store') }}"
-              method="POST">
+            <form action="{{ route('reservas.store') }}" method="POST">
 
-            @csrf
+                @csrf
 
-            <div class="mb-3">
+                <div class="mb-3">
 
-                <label class="form-label">
+                    <label class="form-label">
 
-                    Servicio
+                        Servicio
 
-                </label>
+                    </label>
 
-                <select name="servicio_id"
-                        class="form-select">
+                    <select name="servicio_id" class="form-select">
 
-                    <option value="">
-                        Seleccione un servicio
-                    </option>
-
-                    @foreach($servicios as $servicio)
-
-                        <option value="{{ $servicio->id }}">
-
-                            {{ $servicio->nombre }}
-
-                            -
-
-                            ${{ number_format($servicio->precio, 0, ',', '.') }}
-
+                        <option value="">
+                            Seleccione un servicio
                         </option>
 
-                    @endforeach
+                        @foreach ($servicios as $servicio)
+                            <option value="{{ $servicio->id }}">
 
-                </select>
+                                {{ $servicio->nombre }}
 
-                @error('servicio_id')
+                                -
 
-                    <small class="text-danger">
+                                ${{ number_format($servicio->precio, 0, ',', '.') }}
 
-                        {{ $message }}
+                            </option>
+                        @endforeach
 
-                    </small>
+                    </select>
 
-                @enderror
+                    @error('servicio_id')
+                        <small class="text-danger">
 
-            </div>
+                            {{ $message }}
 
-            <div class="mb-3">
+                        </small>
+                    @enderror
 
-                <label class="form-label">
+                </div>
 
-                    Horario
+                <div class="mb-3">
 
-                </label>
+                    <label class="form-label">
 
-                <select name="horario_id"
-                        class="form-select">
+                        Fecha
 
-                    <option value="">
-                        Seleccione un horario
-                    </option>
+                    </label>
 
-                    @foreach($horarios as $horario)
+                    <input type="date" id="fecha" class="form-control">
 
-                        <option value="{{ $horario->id }}">
+                </div>
 
-                            {{ $horario->fecha }}
+                <div class="mb-3">
 
-                            -
+                    <label class="form-label">
 
-                            {{ $horario->hora_inicio }}
+                        Horario
 
+                    </label>
+
+                    <select name="horario_id" id="horario_id" class="form-select">
+
+                        <option value="">
+                            Seleccione un horario
                         </option>
 
-                    @endforeach
 
-                </select>
+                    </select>
 
-                @error('horario_id')
+                    @error('horario_id')
+                        <small class="text-danger">
 
-                    <small class="text-danger">
+                            {{ $message }}
 
-                        {{ $message }}
+                        </small>
+                    @enderror
 
-                    </small>
+                </div>
 
-                @enderror
+                <button class="btn btn-primary">
 
-            </div>
+                    Guardar reserva
 
-            <button class="btn btn-primary">
+                </button>
 
-                Guardar reserva
+                <a href="{{ route('reservas.index') }}" class="btn btn-secondary">
 
-            </button>
+                    Volver
 
-            <a href="{{ route('reservas.index') }}"
-               class="btn btn-secondary">
+                </a>
 
-                Volver
+            </form>
 
-            </a>
-
-        </form>
+        </div>
 
     </div>
 
-</div>
+@endsection
 
+@section('scripts')
+<script>
+
+document.getElementById('fecha')
+.addEventListener('change', function() {
+
+    let fecha = this.value;
+
+    fetch(`/horarios-disponibles?fecha=${fecha}`)
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let select = document.getElementById('horario_id');
+
+        select.innerHTML =
+            '<option value="">Seleccione un horario</option>';
+
+        data.forEach(horario => {
+
+            select.innerHTML += `
+
+                <option value="${horario.id}">
+
+                    ${horario.hora_inicio}
+
+                </option>
+
+            `;
+
+        });
+
+    });
+
+});
+
+</script>
 @endsection
