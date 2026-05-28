@@ -225,4 +225,16 @@ class ReservaController extends Controller
         }
         return view('reservas.calendario', compact('eventos'));
     }
+
+    public function horariosDisponibles(Request $request){
+        $horarios = Horario::where(
+            'fecha',
+            $request->fecha
+        )
+        ->where('estado', true)
+        ->orderBy('hora_inicio')
+        ->get();
+
+        return response()->json($horarios);
+    }
 }
