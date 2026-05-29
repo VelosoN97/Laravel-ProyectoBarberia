@@ -192,7 +192,8 @@ class ReservaController extends Controller
         ]);
     }
 
-    public function calendario(){
+    public function calendario()
+    {
 
         $reservas = Reserva::with([
             'user',
@@ -201,20 +202,20 @@ class ReservaController extends Controller
         ])->get();
 
         $eventos = [];
-        foreach($reservas as $reserva){
+        foreach ($reservas as $reserva) {
             $eventos[] = [
 
-                'title' => 
+                'title' =>
                 $reserva->servicio->nombre .
-                ' - ' .
-                $reserva->user->name,
+                    ' - ' .
+                    $reserva->user->name,
 
                 'start' =>
                 $reserva->horario->fecha .
-                'T' .
-                $reserva->horario->hora_inicio,
+                    'T' .
+                    $reserva->horario->hora_inicio,
 
-                'color' => match($reserva->estado){
+                'color' => match ($reserva->estado) {
                     'Pendiente' => '#ffc107',
                     'Confirmada' => '#0d6efd',
                     'Completada' => '#198754',
@@ -227,30 +228,45 @@ class ReservaController extends Controller
         return view('reservas.calendario', compact('eventos'));
     }
 
-    public function horariosDisponibles(Request $request){
+    public function horariosDisponibles(Request $request)
+    {
         $horarios = Horario::where(
             'fecha',
             $request->fecha
         )
-        ->where('estado', true)
-        ->orderBy('hora_inicio')
-        ->get();
+            ->where('estado', true)
+            ->orderBy('hora_inicio')
+            ->get();
 
         return response()->json($horarios);
     }
 
-    public function exportarPDF(){
-        
-        $reservas = Reserva::with([
-            'user',
-            'servicio',
-            'horario'
-        ])->get();
+    public function exportarPDF()
+    {
+
+        if (Auth::user()->role == 'admin') {
+
+            $reservas = Reserva::with([
+                'user',
+                'servicio',
+                'horario'
+            ])->get();
+        } else {
+
+            $reservas = Reserva::with([
+                'user',
+                'servicio',
+                'horario'
+            ])
+                ->where('user_id', Auth::id())
+                ->get();
+        }
 
         $pdf = Pdf::loadView(
             'reservas.pdf',
             compact('reservas')
         );
+
         return $pdf->download('reservas.pdf');
     }
 }
