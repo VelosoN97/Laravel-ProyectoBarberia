@@ -13,18 +13,27 @@
                 <h1 class="h3 mb-0">
                     Reservas
                 </h1>
+                <div class="d-flex gap-2">
 
                 <a href="{{ route('reservas.create') }}" class="btn btn-primary">
 
                     Crear reserva
 
                 </a>
-                <a href="{{ route('reservas.pdf') }}" class="btn btn-danger">
+                @if (auth()->user()->role == 'admin')
+                    <a href="{{ route('reservas.pdf') }}" class="btn btn-danger">
 
-                    Exportar PDF
+                        Exportar todas las reservas
 
-                </a>
+                    </a>
+                @else
+                    <a href="{{ route('reservas.pdf') }}" class="btn btn-danger">
 
+                        Exportar mis reservas
+
+                    </a>
+                @endif
+                </div>
             </div>
             <form method="GET" action="{{ route('reservas.index') }}" class="row g-3 mb-4">
 
