@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
     ->name('reservas.calendario');
     Route::get('/horarios-disponibles', [ReservaController::class, 'horariosDisponibles'])
     ->name('reservas.horarios');
+    Route::get('/reservas-pdf', [ReservaController::class, 'exportarPDF'])
+    ->name('reservas.pdf');
 });
 
 Route::middleware('auth')->group(function () {

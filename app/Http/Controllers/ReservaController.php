@@ -7,6 +7,7 @@ use App\Models\Servicio;
 use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReservaController extends Controller
 {
@@ -236,5 +237,20 @@ class ReservaController extends Controller
         ->get();
 
         return response()->json($horarios);
+    }
+
+    public function exportarPDF(){
+        
+        $reservas = Reserva::with([
+            'user',
+            'servicio',
+            'horario'
+        ])->get();
+
+        $pdf = Pdf::loadView(
+            'reservas.pdf',
+            compact('reservas')
+        );
+        return $pdf->download('reservas.pdf');
     }
 }
