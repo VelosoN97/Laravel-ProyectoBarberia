@@ -8,6 +8,8 @@ use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservaCreadaMail;
 
 class ReservaController extends Controller
 {
@@ -94,12 +96,20 @@ class ReservaController extends Controller
             'horario_id' => 'required|exists:horarios,id',
         ]);
 
-        Reserva::create([
+        $reserva = Reserva::create([
             'user_id' => Auth::id(),
             'servicio_id' => $request->servicio_id,
             'horario_id' => $request->horario_id,
             'estado' => 'Pendiente',
         ]);
+
+        $reserva->load([
+            'user',
+            'servicio',
+            'horario'
+        ]);
+
+        Mail::to($reserva->user->email)->send(new ReservaCreadaMail($reserva));
 
         Horario::where('id', $request->horario_id)
             ->update([
