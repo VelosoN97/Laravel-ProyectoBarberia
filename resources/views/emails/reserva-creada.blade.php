@@ -27,12 +27,12 @@
 
     <p>
         <strong>Fecha:</strong>
-        {{ $reserva->horario->fecha }}
+        {{ \Carbon\Carbon::parse($reserva->horario->fecha)->format('d/m/Y') }}
     </p>
 
     <p>
         <strong>Hora:</strong>
-        {{ $reserva->horario->hora_inicio }}
+        {{ \Carbon\Carbon::parse($reserva->horario->hora_inicio)->format('H:i') }}
     </p>
 
     <p>
