@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservaCreadaMail;
+use App\Mail\CambioEstadoReservaMail;
 
 class ReservaController extends Controller
 {
@@ -195,6 +196,14 @@ class ReservaController extends Controller
         $reserva->update([
             'estado' => $request->estado
         ]);
+
+        $reserva->load([
+            'user',
+            'servicio',
+            'horario'
+        ]);
+
+        Mail::to($reserva->user->email)->send(new CambioEstadoReservaMail($reserva));
 
         return response()->json([
             'success' => true,
