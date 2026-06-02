@@ -97,6 +97,24 @@ class ReservaController extends Controller
             'horario_id' => 'required|exists:horarios,id',
         ]);
 
+        $horarioDisponible = Horario::where(
+            'id',
+            $request->horario_id
+        )
+            ->where(
+                'estado',
+                true
+            )
+            ->exists();
+
+        if (!$horarioDisponible) {
+            return back()
+                ->withErrors([
+                    'horario_id' => 'El horario seleccionado ya no está disponible.'
+                ])
+                ->withInput();
+        }
+
         $reserva = Reserva::create([
             'user_id' => Auth::id(),
             'servicio_id' => $request->servicio_id,
@@ -196,6 +214,16 @@ class ReservaController extends Controller
         $reserva->update([
             'estado' => $request->estado
         ]);
+
+        if ($request->estado == 'Cancelada') {
+
+            Horario::where(
+                'id',
+                $reserva->horario_id
+            )->update([
+                'estado' => true
+            ]);
+        }
 
         $reserva->load([
             'user',
